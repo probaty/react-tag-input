@@ -1,13 +1,17 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import React, { FunctionComponent, useRef, useState } from "react";
+import Suggestion from "../Suggestion/Suggestion";
+import Tag from "../Tag/Tag";
+import "./TagInput.css";
 
 interface TagInputProps {
   inputName: string;
   className?: string;
   tagClassName?: string;
   textColor?: string;
+  textTagColor?: string;
   bgColor?: string;
   bgTagColor?: string;
-  autocomplete?: boolean;
+  suggestion?: string[];
   data?: CustomTag[];
 }
 
@@ -18,26 +22,28 @@ interface CustomTag {
 
 const TagInput: FunctionComponent<TagInputProps> = ({
   inputName,
-  className = "",
-}: TagInputProps) => {
+  className,
+  tagClassName,
+  textColor,
+  textTagColor,
+  suggestion,
+  bgColor,
+  bgTagColor,
+  children,
+  data,
+}) => {
   const [tags, updateTags] = useState<string[]>([]);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [inputValue, setInputValue] = useState<string>("");
+  const tagsInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (!inputRef.current) return;
-    inputRef.current.value = tags.join("*_*");
-  }, [tags]);
-
-  const handleKeyDown = (
-    e: React.KeyboardEvent & React.FormEvent<HTMLInputElement>
-  ): void => {
+  const handleKeyDown = (e: React.KeyboardEvent): void => {
     if (e.key === "Enter") {
-      if (!e.currentTarget.value) return;
-      updateTags([...tags, e.currentTarget.value]);
-      e.currentTarget.value = "";
+      if (!inputValue) return;
+      updateTags([...tags, inputValue.trim()]);
+      setInputValue("");
     }
     if (e.key === "Backspace") {
-      if (e.currentTarget.value) return;
+      if (inputValue) return;
       updateTags(tags.filter((_, index) => index !== tags.length - 1));
     }
   };
@@ -45,29 +51,55 @@ const TagInput: FunctionComponent<TagInputProps> = ({
   const removeTag = (indexToRemove: number): void => {
     updateTags(tags.filter((_, index) => index !== indexToRemove));
   };
+
+  const changeFocus = () => {
+    if (!tagsInputRef.current) return;
+    tagsInputRef.current.focus();
+  };
+
+  const handleChange = (e: React.FormEvent<HTMLInputElement>): void => {
+    setInputValue(e.currentTarget.value);
+  };
+
+  // const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+  //   setInputValue("");
+  // };
+
   return (
-    <div className={`tag-field ${className}`}>
+    <div
+      className={`tags-field ${className ? className : ""}`}
+      tabIndex={1}
+      onFocus={changeFocus}
+      // onBlur={handleBlur}
+    >
       <input
         name={inputName}
-        ref={inputRef}
+        type="text"
+        value={tags.join("*_*")}
         style={{
           display: "none",
         }}
       />
-      <ol className="tags">
+      <div className="tags">
         {tags.map((tag, index) => (
-          <li key={index}>
+          <Tag removeTag={() => removeTag(index)} key={index}>
             {tag}
-            <span onClick={() => removeTag(index)}>×</span>
-          </li>
+          </Tag>
         ))}
-      </ol>
-      <input
-        type="text"
-        className="tag-input"
-        placeholder="Press enter to add tag..."
-        onKeyDown={handleKeyDown}
-      />
+        <input
+          type="text"
+          className="tag-input"
+          ref={tagsInputRef}
+          onChange={handleChange}
+          value={inputValue}
+          style={{
+            display: !tags.length ? "block" : "",
+          }}
+          placeholder={tags.length ? "" : "Press enter to add tag..."}
+          onKeyDown={handleKeyDown}
+        />
+      </div>
+      <Suggestion>{inputValue}</Suggestion>
     </div>
   );
 };

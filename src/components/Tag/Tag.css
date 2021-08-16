@@ -1,0 +1,22 @@
+.tag {
+  display: inline-flex;
+  align-items: baseline;
+  padding: 3px 7px;
+  background: #d5e6ff;
+  border-radius: 5px;
+  margin: 4px;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+}
+.tag .tag-close {
+  display: none;
+  font-size: 1.2rem;
+  line-height: 0;
+  margin-left: 3px;
+  font-weight: 900;
+  opacity: 0.5;
+  cursor: pointer;
+}
+.tag .tag-close:hover {
+  opacity: 0.35;
+}

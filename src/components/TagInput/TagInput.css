@@ -1,0 +1,36 @@
+.tags-field {
+  cursor: default;
+  border: 2px solid rgb(248, 248, 248);
+  border-radius: 5px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.tags-field:focus-within {
+  cursor: auto;
+  border-color: transparent;
+  background: rgb(248, 248, 248);
+}
+.tags-field:focus-within .tag-input {
+  display: block;
+}
+.tags-field:focus-within .tags .tag .tag-close {
+  display: inline;
+}
+.tags-field .tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+.tags-field .tag-input {
+  display: none;
+  font-family: inherit;
+  font-size: inherit;
+  border: none;
+  background: transparent;
+  padding: 4px 5px 4px 10px;
+  width: 80px;
+  flex-grow: 2;
+}
+.tags-field .tag-input:focus {
+  outline: none;
+}
