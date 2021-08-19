@@ -11,7 +11,8 @@ interface TagInputProps {
   textTagColor?: string;
   bgColor?: string;
   bgTagColor?: string;
-  suggestion?: string[];
+  suggestion?: "none" | "default" | "extended";
+  suggestionData?: string[];
   data?: CustomTag[];
 }
 
@@ -26,26 +27,35 @@ const TagInput: FunctionComponent<TagInputProps> = ({
   tagClassName,
   textColor,
   textTagColor,
-  suggestion,
   bgColor,
   bgTagColor,
   children,
   data,
+  suggestion = "default",
 }) => {
   const [tags, updateTags] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
   const tagsInputRef = useRef<HTMLInputElement>(null);
+  let borderRadius = "5px";
+
+  if (suggestion === "default" || suggestion === "extended") {
+    borderRadius = "";
+  }
 
   const handleKeyDown = (e: React.KeyboardEvent): void => {
     if (e.key === "Enter") {
       if (!inputValue) return;
-      updateTags([...tags, inputValue.trim()]);
-      setInputValue("");
+      addTag();
     }
     if (e.key === "Backspace") {
       if (inputValue) return;
-      updateTags(tags.filter((_, index) => index !== tags.length - 1));
+      removeTag(tags.length - 1);
     }
+  };
+
+  const addTag = (): void => {
+    updateTags([...tags, inputValue.trim()]);
+    setInputValue("");
   };
 
   const removeTag = (indexToRemove: number): void => {
@@ -61,16 +71,23 @@ const TagInput: FunctionComponent<TagInputProps> = ({
     setInputValue(e.currentTarget.value);
   };
 
-  // const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-  //   setInputValue("");
-  // };
+  const suggestionBlock =
+    suggestion === "extended" ? (
+      <Suggestion extended addTag={addTag}>
+        {inputValue}
+      </Suggestion>
+    ) : (
+      <Suggestion addTag={addTag}>{inputValue}</Suggestion>
+    );
 
   return (
     <div
       className={`tags-field ${className ? className : ""}`}
       tabIndex={1}
       onFocus={changeFocus}
-      // onBlur={handleBlur}
+      style={{
+        borderRadius: inputValue ? borderRadius : "5px",
+      }}
     >
       <input
         name={inputName}
@@ -99,7 +116,7 @@ const TagInput: FunctionComponent<TagInputProps> = ({
           onKeyDown={handleKeyDown}
         />
       </div>
-      <Suggestion>{inputValue}</Suggestion>
+      {suggestion !== "none" && inputValue && suggestionBlock}
     </div>
   );
 };
