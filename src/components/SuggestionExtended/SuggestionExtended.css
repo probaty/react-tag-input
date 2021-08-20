@@ -1,0 +1,16 @@
+.tags-suggestion__extended {
+  display: flex;
+  flex-direction: column;
+}
+.tags-suggestion__extended small {
+  color: #777777;
+  padding: 5px 10px;
+  cursor: default;
+}
+.tags-suggestion__extended__tag {
+  cursor: pointer;
+  padding-left: 5px;
+}
+.tags-suggestion__extended__tag:hover {
+  background: rgb(245, 245, 245);
+}

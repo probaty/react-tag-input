@@ -5,7 +5,11 @@ import TagInput from "./components/TagInput/TagInput";
 function App() {
   return (
     <div className="App">
-      <TagInput inputName="lol" />
+      <TagInput
+        inputName="lol"
+        suggestionData={["lol", "jopa", "axaxax"]}
+        suggestion="extended"
+      />
     </div>
   );
 }

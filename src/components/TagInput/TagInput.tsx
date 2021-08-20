@@ -1,8 +1,9 @@
-import React, { FunctionComponent, useRef, useState } from "react";
+import React, { FunctionComponent, useMemo, useRef, useState } from "react";
 import Suggestion from "../Suggestion/Suggestion";
 import Tag from "../Tag/Tag";
 import "./TagInput.css";
 import { randomColor } from "../randomColor";
+import { CustomTag } from "../CustomTag.props";
 
 interface TagInputProps {
   inputName: string;
@@ -17,11 +18,6 @@ interface TagInputProps {
   data?: CustomTag[];
 }
 
-interface CustomTag {
-  name: string;
-  color: string;
-}
-
 const TagInput: FunctionComponent<TagInputProps> = ({
   inputName,
   className,
@@ -32,17 +28,19 @@ const TagInput: FunctionComponent<TagInputProps> = ({
   bgTagColor,
   children,
   data,
+  suggestionData = [],
   suggestion = "default",
 }) => {
   const [tags, updateTags] = useState<CustomTag[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
   const [currentColor, setCurrentColor] = useState<string>(randomColor());
   const tagsInputRef = useRef<HTMLInputElement>(null);
-  let borderRadius = "5px";
 
-  if (suggestion === "default" || suggestion === "extended") {
-    borderRadius = "";
-  }
+  let suggestionTags: CustomTag[] = useMemo(() => {
+    return suggestionData.map((tagName: string): CustomTag => {
+      return { name: tagName, color: randomColor() };
+    });
+  }, [suggestionData]);
 
   const handleKeyDown = (e: React.KeyboardEvent): void => {
     if (e.key === "Enter") {
@@ -57,16 +55,29 @@ const TagInput: FunctionComponent<TagInputProps> = ({
 
   const addTag = (): void => {
     const tag: CustomTag = { name: inputValue.trim(), color: currentColor };
+    if (checkIncludes(tag.name)) return;
     updateTags([...tags, tag]);
     setInputValue("");
     setCurrentColor(randomColor());
+  };
+
+  const addSuggestionTag = (tag: CustomTag): void => {
+    if (checkIncludes(tag.name)) return;
+    updateTags([...tags, tag]);
+    setInputValue("");
+  };
+
+  const checkIncludes = (name: string): boolean => {
+    const found = tags.find((tag) => tag.name === name);
+    if (found) return true;
+    return false;
   };
 
   const removeTag = (indexToRemove: number): void => {
     updateTags(tags.filter((_, index) => index !== indexToRemove));
   };
 
-  const changeFocus = () => {
+  const changeFocus = (): void => {
     if (!tagsInputRef.current) return;
     tagsInputRef.current.focus();
   };
@@ -75,13 +86,17 @@ const TagInput: FunctionComponent<TagInputProps> = ({
     setInputValue(e.currentTarget.value);
   };
 
+  const handleBlur = (e: React.FormEvent<HTMLInputElement>): void => {
+    setInputValue("");
+  };
+
   return (
     <div
       className={`tags-field ${className ? className : ""}`}
       tabIndex={1}
       onFocus={changeFocus}
       style={{
-        borderRadius: inputValue ? borderRadius : "5px",
+        borderRadius: inputValue ? "5px 5px 0 0" : "5px",
       }}
     >
       <input
@@ -106,6 +121,7 @@ const TagInput: FunctionComponent<TagInputProps> = ({
           type="text"
           className="tag-input"
           ref={tagsInputRef}
+          onBlur={handleBlur}
           onChange={handleChange}
           value={inputValue}
           style={{
@@ -115,15 +131,15 @@ const TagInput: FunctionComponent<TagInputProps> = ({
           onKeyDown={handleKeyDown}
         />
       </div>
-      {inputValue && (
-        <Suggestion
-          addTag={addTag}
-          currentColor={currentColor}
-          extended={suggestion === "extended" ? true : false}
-        >
-          {inputValue}
-        </Suggestion>
-      )}
+      <Suggestion
+        addTag={addTag}
+        addSuggestionTag={addSuggestionTag}
+        currentColor={currentColor}
+        extended={suggestion === "extended" ? true : false}
+        data={suggestionTags}
+      >
+        {inputValue}
+      </Suggestion>
     </div>
   );
 };
