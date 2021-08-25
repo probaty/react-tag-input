@@ -20,6 +20,9 @@ const Suggestion: FunctionComponent<SuggestionProps> = ({
   data = [],
   extended = false,
 }) => {
+  const handleClick = () => {
+    addTag();
+  };
   return (
     <div className="tags-suggestion">
       {extended && data.length > 0 && (
@@ -30,7 +33,7 @@ const Suggestion: FunctionComponent<SuggestionProps> = ({
         />
       )}
       {children && (
-        <div className="tags-suggestion__base" onClick={addTag}>
+        <div className="tags-suggestion__base" onClick={handleClick}>
           Create
           <Tag bgColor={currentColor}>{children}</Tag>
         </div>

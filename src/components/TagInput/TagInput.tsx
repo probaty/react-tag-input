@@ -86,8 +86,10 @@ const TagInput: FunctionComponent<TagInputProps> = ({
     setInputValue(e.currentTarget.value);
   };
 
-  const handleBlur = (e: React.FormEvent<HTMLInputElement>): void => {
-    setInputValue("");
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>): void => {
+    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+      setInputValue("");
+    }
   };
 
   return (
@@ -95,6 +97,7 @@ const TagInput: FunctionComponent<TagInputProps> = ({
       className={`tags-field ${className ? className : ""}`}
       tabIndex={1}
       onFocus={changeFocus}
+      onBlur={handleBlur}
       style={{
         borderRadius: inputValue ? "5px 5px 0 0" : "5px",
       }}
@@ -121,7 +124,6 @@ const TagInput: FunctionComponent<TagInputProps> = ({
           type="text"
           className="tag-input"
           ref={tagsInputRef}
-          onBlur={handleBlur}
           onChange={handleChange}
           value={inputValue}
           style={{
