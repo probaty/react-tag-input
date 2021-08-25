@@ -23,6 +23,7 @@
   flex-wrap: wrap;
   align-items: flex-end;
   overflow: hidden;
+  padding: 3px;
 }
 .tags-field .tag-input {
   display: none;
