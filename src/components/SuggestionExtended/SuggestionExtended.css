@@ -1,6 +1,8 @@
 .tags-suggestion__extended {
   display: flex;
   flex-direction: column;
+  max-height: calc(30vh + 100px);
+  overflow: auto;
 }
 .tags-suggestion__extended small {
   color: #777777;

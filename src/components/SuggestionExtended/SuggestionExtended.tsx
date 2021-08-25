@@ -14,9 +14,13 @@ const SuggestionExtended: FunctionComponent<SuggestionExtendedProps> = ({
   inputValue,
   addTag,
 }) => {
-  let filteredTags = tags.filter((tag: CustomTag) =>
-    tag.name.includes(inputValue)
-  );
+  let filteredTags =
+    inputValue.length === 0
+      ? tags
+      : tags.filter(
+          ({ name }) =>
+            name.toLowerCase().slice(0, inputValue.length) === inputValue
+        );
 
   return (
     <div className="tags-suggestion__extended">

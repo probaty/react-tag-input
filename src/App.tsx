@@ -7,7 +7,45 @@ function App() {
     <div className="App">
       <TagInput
         inputName="lol"
-        suggestionData={["lol", "jopa", "axaxax"]}
+        suggestionData={[
+          "lol",
+          "jopa",
+          "lol",
+          "jopa",
+          "lol",
+          "jopa",
+          "lol",
+          "jopa",
+          "lol",
+          "jopa",
+          "lol",
+          "lol",
+          "lol",
+          "jopa",
+          "lol",
+          "jopa",
+          "lol",
+          "jopa",
+          "lol",
+          "jopa",
+          "axaxax",
+          "jopa",
+          "lol",
+          "jopa",
+          "lol",
+          "jopa",
+          "lol",
+          "jopa",
+          "axaxax",
+          "jopa",
+          "lol",
+          "jopa",
+          "lol",
+          "jopa",
+          "lol",
+          "jopa",
+          "axaxax",
+        ]}
         suggestion="extended"
       />
     </div>
