@@ -2,15 +2,23 @@
   position: relative;
   cursor: pointer;
   border: 2px solid rgb(248, 248, 248);
+  background: #fff;
   box-sizing: border-box;
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
   -webkit-tap-highlight-color: transparent;
+}
+.tags-field.dark {
+  background: rgb(43, 43, 43);
+  border-color: rgb(51, 51, 51);
 }
 .tags-field:focus-within {
   cursor: auto;
   border-color: transparent;
   background: rgb(248, 248, 248);
   box-shadow: 0 3px 9px 0 rgba(0, 0, 0, 0.1);
+}
+.tags-field:focus-within.dark {
+  background: rgb(51, 51, 51);
 }
 .tags-field:focus-within .tag-input {
   display: block;
@@ -34,6 +42,9 @@
   padding: 4px 5px 4px 10px;
   width: 80px;
   flex-grow: 2;
+}
+.tags-field.dark .tag-input {
+  color: #dbdbdb;
 }
 .tags-field .tag-input:focus {
   outline: none;

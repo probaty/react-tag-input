@@ -1,4 +1,6 @@
 .App {
   margin: 0 auto;
   box-sizing: border-box;
+  background: #1d1d1d;
+  height: 100vh;
 }

@@ -1,4 +1,10 @@
-import React, { FunctionComponent, useMemo, useRef, useState } from "react";
+import React, {
+  FunctionComponent,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Suggestion from "../Suggestion/Suggestion";
 import Tag from "../Tag/Tag";
 import "./TagInput.css";
@@ -6,8 +12,11 @@ import { randomColor } from "../randomColor";
 import { CustomTag } from "../CustomTag.props";
 
 interface TagInputProps {
-  inputName: string;
+  inputName?: string;
   className?: string;
+  darkMode?: boolean;
+  primaryColor?: string;
+  secondaryColor?: string;
   tagClassName?: string;
   textColor?: string;
   textTagColor?: string;
@@ -28,19 +37,23 @@ const TagInput: FunctionComponent<TagInputProps> = ({
   bgTagColor,
   children,
   data,
+  darkMode = false,
   suggestionData = [],
   suggestion = "default",
 }) => {
   const [tags, updateTags] = useState<CustomTag[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
-  const [currentColor, setCurrentColor] = useState<string>(randomColor());
+  const [currentColor, setCurrentColor] = useState<string>(
+    randomColor(darkMode)
+  );
+  const [borderRadius, setBorderRadius] = useState<string>("5px");
   const tagsInputRef = useRef<HTMLInputElement>(null);
 
   let suggestionTags: CustomTag[] = useMemo(() => {
     return suggestionData.map((tagName: string): CustomTag => {
-      return { name: tagName, color: randomColor() };
+      return { name: tagName, color: randomColor(darkMode) };
     });
-  }, [suggestionData]);
+  }, [suggestionData, darkMode]);
 
   const handleKeyDown = (e: React.KeyboardEvent): void => {
     if (e.key === "Enter") {
@@ -58,7 +71,7 @@ const TagInput: FunctionComponent<TagInputProps> = ({
     if (checkIncludes(tag.name)) return;
     updateTags([...tags, tag]);
     setInputValue("");
-    setCurrentColor(randomColor());
+    setCurrentColor(randomColor(darkMode));
   };
 
   const addSuggestionTag = (tag: CustomTag): void => {
@@ -77,29 +90,34 @@ const TagInput: FunctionComponent<TagInputProps> = ({
     updateTags(tags.filter((_, index) => index !== indexToRemove));
   };
 
-  const changeFocus = (): void => {
+  const handleFocus = (): void => {
     if (!tagsInputRef.current) return;
     tagsInputRef.current.focus();
+    if (suggestion === "extended") setBorderRadius("5px 5px 0 0");
   };
 
   const handleChange = (e: React.FormEvent<HTMLInputElement>): void => {
     setInputValue(e.currentTarget.value);
+    if (inputValue) setBorderRadius("5px 5px 0 0");
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>): void => {
     if (!e.currentTarget.contains(e.relatedTarget as Node)) {
       setInputValue("");
+      setBorderRadius("5px");
     }
   };
 
   return (
     <div
-      className={`tags-field ${className ? className : ""}`}
+      className={`tags-field ${className ? className : ""}${
+        darkMode ? "dark" : ""
+      }`}
       tabIndex={1}
-      onFocus={changeFocus}
+      onFocus={handleFocus}
       onBlur={handleBlur}
       style={{
-        borderRadius: inputValue ? "5px 5px 0 0" : "5px",
+        borderRadius: borderRadius,
       }}
     >
       <input

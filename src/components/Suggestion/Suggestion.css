@@ -17,10 +17,16 @@
   display: none;
   color: rgba(0, 0, 0, 0.8);
 }
+.tags-field.dark .tags-suggestion {
+  background: rgb(43, 43, 43);
+}
 .tags-suggestion .tags-suggestion__base {
   display: flex;
   align-items: baseline;
   padding: 0 10px;
+}
+.tags-field.dark .tags-suggestion__base {
+  color: #dbdbdb;
 }
 .tags-field:focus-within .tags-suggestion {
   display: block;

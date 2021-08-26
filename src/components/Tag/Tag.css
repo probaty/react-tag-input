@@ -2,11 +2,13 @@
   display: inline-flex;
   align-items: baseline;
   padding: 3px 7px;
-  background: #d5e6ff;
   border-radius: 5px;
   margin: 4px;
   line-height: 1;
-  color: rgba(0, 0, 0, 0.8);
+  opacity: 0.9;
+}
+.tags-field.dark .tag {
+  color: #fff;
 }
 .tag .tag-close {
   display: none;

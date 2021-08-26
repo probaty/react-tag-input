@@ -7,6 +7,7 @@ function App() {
     <div className="App">
       <TagInput
         inputName="lol"
+        darkMode
         suggestionData={[
           "lol",
           "jopa",
