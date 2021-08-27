@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import TagInput from "./components/TagInput/TagInput";
 
 function App() {
+  const [darkMode, setDarkMode] = useState<boolean>(false);
   return (
     <div className="App">
       <TagInput
         inputName="lol"
-        darkMode
+        darkMode={darkMode}
         suggestionData={[
           "lol",
           "jopa",
@@ -49,6 +50,9 @@ function App() {
         ]}
         suggestion="extended"
       />
+      <button onClick={() => setDarkMode(!darkMode)} style={{ margin: 50 }}>
+        switch
+      </button>
     </div>
   );
 }

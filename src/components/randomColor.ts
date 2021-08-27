@@ -10,9 +10,9 @@ const colorsLight: string[] = [
 ];
 const colorsDark: string[] = [
   "#3f6982",
+  "#62534c",
   "#923f6d",
   "#64508d",
-  "#62534c",
   "#906b37",
   "#3c7469",
   "#9b5452",
@@ -23,4 +23,11 @@ export const randomColor = (dark: boolean = false): string => {
   return dark
     ? colorsDark[Math.floor(Math.random() * colorsDark.length)]
     : colorsLight[Math.floor(Math.random() * colorsLight.length)];
+};
+
+export const switchColor = (color: string): string => {
+  if (colorsLight.includes(color)) {
+    return colorsDark[colorsLight.indexOf(color)];
+  }
+  return colorsLight[colorsDark.indexOf(color)];
 };

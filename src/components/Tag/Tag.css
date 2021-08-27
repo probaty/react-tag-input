@@ -6,6 +6,7 @@
   margin: 4px;
   line-height: 1;
   opacity: 0.9;
+  transition: all 0.15s;
 }
 .tags-field.dark .tag {
   color: #fff;

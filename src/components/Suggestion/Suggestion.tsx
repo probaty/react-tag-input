@@ -23,7 +23,7 @@ const Suggestion: FunctionComponent<SuggestionProps> = ({
   const handleClick = () => {
     addTag();
   };
-  return (
+  return children || data.length > 0 ? (
     <div className="tags-suggestion">
       {extended && data.length > 0 && (
         <SuggestionExtended
@@ -39,7 +39,7 @@ const Suggestion: FunctionComponent<SuggestionProps> = ({
         </div>
       )}
     </div>
-  );
+  ) : null;
 };
 
 export default Suggestion;

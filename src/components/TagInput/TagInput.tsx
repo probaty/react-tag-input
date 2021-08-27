@@ -8,7 +8,7 @@ import React, {
 import Suggestion from "../Suggestion/Suggestion";
 import Tag from "../Tag/Tag";
 import "./TagInput.css";
-import { randomColor } from "../randomColor";
+import { randomColor, switchColor } from "../randomColor";
 import { CustomTag } from "../CustomTag.props";
 
 interface TagInputProps {
@@ -44,16 +44,41 @@ const TagInput: FunctionComponent<TagInputProps> = ({
   const [tags, updateTags] = useState<CustomTag[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
   const [currentColor, setCurrentColor] = useState<string>(
-    randomColor(darkMode)
+    randomColor(!darkMode)
   );
   const [borderRadius, setBorderRadius] = useState<string>("5px");
   const tagsInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    switchMode();
+  }, [darkMode]);
 
   let suggestionTags: CustomTag[] = useMemo(() => {
     return suggestionData.map((tagName: string): CustomTag => {
       return { name: tagName, color: randomColor(darkMode) };
     });
   }, [suggestionData, darkMode]);
+
+  const switchMode = () => {
+    setCurrentColor(switchColor(currentColor));
+
+    if (tags.length) {
+      updateTags(
+        tags.map((tag: CustomTag) => {
+          return {
+            name: tag.name,
+            color: switchColor(tag.color),
+          };
+        })
+      );
+    }
+
+    if (suggestionTags) {
+      suggestionTags = suggestionTags.map((tag: CustomTag) => {
+        return { name: tag.name, color: switchColor(tag.color) };
+      });
+    }
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent): void => {
     if (e.key === "Enter") {
@@ -118,6 +143,7 @@ const TagInput: FunctionComponent<TagInputProps> = ({
       onBlur={handleBlur}
       style={{
         borderRadius: borderRadius,
+        colorScheme: darkMode ? "dark" : "light",
       }}
     >
       <input
